@@ -176,15 +176,10 @@ decryptWithoutPassword input =
         dists        = distances peaks
         keyLen       = findKeyLength dists
         key          = assembleKey cleaned keyLen englishFrequency
-    in unsafePerformIO $ do
-        putStrLn $ "Cleaned text: " ++ take 100 cleaned ++ "..."
-        putStrLn $ "Coincidences: " ++ show coincidences
-        putStrLn $ "Mean: " ++ show meanVal ++ ", Stdev: " ++ show stdevVal
-        putStrLn $ "Peaks: " ++ show peaks
-        putStrLn $ "Distances: " ++ show dists
-        putStrLn $ "Guessed key length: " ++ show keyLen
-        putStrLn $ "Guessed key: " ++ key
-        return $ decrypt cleaned key
+    in decrypt cleaned key
+
+
+-- adding this comment so I can change this file and recommit hoping it works
 
 
 
