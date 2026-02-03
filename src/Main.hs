@@ -91,7 +91,7 @@ calcMean nums = fromIntegral (sum nums) / fromIntegral (length nums)
 
 
 calcStdev :: [Int] -> Double
-calcStdev xs = sqrt $ sum (map (\x -> (fromIntegral x - m) ^ 2) xs) / fromIntegral (length xs)
+calcStdev xs = sqrt $ sum (map (\x -> (fromIntegral x - m) ** 2) xs) / fromIntegral (length xs)
   where
     m = calcMean xs
 
@@ -125,8 +125,8 @@ shiftChar n = chr (ord 'a' + n `mod` 26)
 
 -- turn candidate phase into frequency vector
 makeFrequencyVector :: String -> Int -> [Int]
-makeFrequencyVector phase shift =
-    let shifted = map (`decipherChar` shiftChar shift) phase
+makeFrequencyVector phase _shift =
+    let shifted = map (`decipherChar` shiftChar _shift) phase
         letters = ['a' .. 'z']
     in [ length (filter (== l) shifted) | l <- letters ]
 
@@ -145,7 +145,7 @@ shiftToChar n = chr (ord 'a' + n)
 findMostLikely :: [Double] -> String -> Char
 findMostLikely english phase = 
     let candidates = [0..25]
-        scored = [(shiftToChar shift, dot (makeFrequencyVector phase shift) english) | shift <- candidates]
+        scored = [(shiftToChar _shift, dot (makeFrequencyVector phase _shift) english) | _shift <- candidates]
         (best, _) = maximumBy (comparing snd) scored
     in best
 
