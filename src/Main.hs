@@ -1,5 +1,5 @@
 import System.Environment (getArgs)
-import System.Exit (die)
+import System.IO (getContents)
 import Data.Char (ord, chr, isAscii, isLower, isUpper, isAlpha, toLower)
 import Data.List (maximumBy)
 import Data.Ord (comparing)
@@ -9,12 +9,23 @@ import System.IO.Unsafe (unsafePerformIO)
 main :: IO ()
 main = do
     args <- getArgs
-    interact (processor args)
-  where
-    processor ("--encrypt":password:_) = \input -> format (encrypt input password)
-    processor ("--decrypt":password:_) = \input -> format (decrypt input password)
-    processor ("--decrypt-auto":_)    = \input -> format (decryptWithoutPassword input)
-    processor _                        = \_ -> "usage: vigenere (--encrypt PASSWORD | --decrypt PASSWORD | --decrypt-auto)\n"
+    case args of
+        ("--encrypt":password:_) -> do
+            input <- getContents
+            putStrLn $ format (encrypt input password)
+
+        ("--decrypt":password:_) -> do
+            input <- getContents
+            putStrLn $ format (decrypt input password)
+
+        ("--decrypt-auto":_) -> do
+            input <- getContents
+            let password  = decryptWithoutPassword input
+                plaintext = decrypt input password
+            putStrLn $ "password: " ++ password
+            putStrLn plaintext
+
+        _ -> putStrLn "usage: vigenere (--encrypt PASSWORD | --decrypt PASSWORD | --decrypt-auto)"
 
 
 encrypt :: String -> String -> String
