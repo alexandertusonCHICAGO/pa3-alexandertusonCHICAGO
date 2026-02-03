@@ -1,30 +1,21 @@
 import System.Environment (getArgs)
-import System.IO (getContents)
 import Data.Char (ord, chr, isAscii, isLower, isUpper, isAlpha, toLower)
 import Data.List (maximumBy)
 import Data.Ord (comparing)
-import System.IO.Unsafe (unsafePerformIO)
 
 
 main :: IO ()
 main = do
     args <- getArgs
+    input <- getContents
     case args of
-        ("--encrypt":password:_) -> do
-            input <- getContents
-            putStrLn $ format (encrypt input password)
-
-        ("--decrypt":password:_) -> do
-            input <- getContents
-            putStrLn $ format (decrypt input password)
-
+        ("--encrypt":password:_) -> putStrLn $ format (encrypt input password)
+        ("--decrypt":password:_) -> putStrLn $ format (decrypt input password)
         ("--decrypt-auto":_) -> do
-            input <- getContents
             let password  = decryptWithoutPassword input
                 plaintext = decrypt input password
             putStrLn $ "password: " ++ password
             putStrLn plaintext
-
         _ -> putStrLn "usage: vigenere (--encrypt PASSWORD | --decrypt PASSWORD | --decrypt-auto)"
 
 
