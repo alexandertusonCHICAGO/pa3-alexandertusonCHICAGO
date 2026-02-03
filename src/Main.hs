@@ -8,7 +8,6 @@ import System.IO.Unsafe (unsafePerformIO)
 
 main :: IO ()
 main = do
-    putStrLn "Starting program..."
     args <- getArgs
     interact (processor args)
   where
